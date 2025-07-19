@@ -13,8 +13,8 @@ RUN npm install
 # Copiar el resto de archivos
 COPY . .
 
-# Exponer puerto 3000
-EXPOSE 3000
+# Exponer puerto 5173 (puerto por defecto de Vite)
+EXPOSE 5173
 
-# Comando para iniciar la aplicación en modo desarrollo
-CMD ["npm", "start"]
+# Comando para iniciar la aplicación en modo desarrollo con Vite
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
