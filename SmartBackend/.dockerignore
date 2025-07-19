@@ -1,0 +1,11 @@
+node_modules
+npm-debug.log
+vendor
+.env
+.git
+.gitignore
+README.md
+Dockerfile
+.dockerignore
+storage/logs/*
+bootstrap/cache/*

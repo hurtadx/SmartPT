@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # Servicio de PostgreSQL
+  postgres:
+    image: postgres:15
+    container_name: smartpt_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: db_Smart
+      POSTGRES_USER: laravel_user
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U laravel_user -d db_Smart"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - smartpt_network
+
+  # Servicio de Laravel (Backend)
+  backend:
+    build:
+      context: ./SmartBackend
+      dockerfile: Dockerfile
+    container_name: smartpt_backend
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=db_Smart
+      - DB_USERNAME=laravel_user
+      - DB_PASSWORD=1234
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./SmartBackend:/var/www/html
+    networks:
+      - smartpt_network
+
+  # Servicio de React (Frontend)
+  frontend:
+    build:
+      context: ./SmartFrontend
+      dockerfile: Dockerfile
+    container_name: smartpt_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000/api
+    networks:
+      - smartpt_network
+
+volumes:
+  postgres_data:
+
+networks:
+  smartpt_network:
+    driver: bridge
