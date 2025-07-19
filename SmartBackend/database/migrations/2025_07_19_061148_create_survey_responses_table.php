@@ -21,7 +21,7 @@ return new class extends Migration
             $table->json('programming_languages')->nullable(); // Pregunta 3: selección múltiple (JavaScript, PHP, Python, Java)
             $table->integer('teamwork_rating')->nullable(); // Pregunta 4: escala 1-5
             $table->boolean('agile_experience')->nullable(); // Pregunta 5: Sí/No
-            
+
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
         });
