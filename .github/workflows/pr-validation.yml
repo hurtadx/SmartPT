@@ -21,7 +21,7 @@ jobs:
           # Verificar que el título del PR sigue convenciones
           PR_TITLE="${{ github.event.pull_request.title }}"
           if [[ ! "$PR_TITLE" =~ ^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+ ]]; then
-            echo "❌ PR title must follow conventional commits format"
+            echo "PR title must follow conventional commits format"
             echo "Examples: 'feat: add user authentication', 'fix(auth): resolve login bug'"
             exit 1
           fi
@@ -37,7 +37,7 @@ jobs:
           # Verificar que no se están commiteando archivos sensibles
           SENSITIVE_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.(env|key|pem|p12)$' || true)
           if [ ! -z "$SENSITIVE_FILES" ]; then
-            echo "❌ Sensitive files detected in PR:"
+            echo "Sensitive files detected in PR:"
             echo "$SENSITIVE_FILES"
             exit 1
           fi
@@ -107,13 +107,13 @@ jobs:
       - name: Run Backend Tests
         if: steps.backend-changed.outputs.changed == 'true'
         run: |
-          echo "🧪 Running backend tests..."
+          echo "Running backend tests..."
           # Aquí iría la lógica de tests del backend
 
       - name: Run Frontend Tests
         if: steps.frontend-changed.outputs.changed == 'true'
         run: |
-          echo "🧪 Running frontend tests..."
+          echo " Running frontend tests..."
           # Aquí iría la lógica de tests del frontend
 
   # Comentario automático con resumen
@@ -131,9 +131,9 @@ jobs:
             const summary = `
             ## 📋 PR Validation Summary
             
-            **Validation Status:** ${{ needs.pr-validation.result == 'success' && '✅ Passed' || '❌ Failed' }}
-            **Analysis Status:** ${{ needs.changed-files-analysis.result == 'success' && '✅ Completed' || '❌ Failed' }}
-            **Tests Status:** ${{ needs.conditional-tests.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            **Validation Status:** ${{ needs.pr-validation.result == 'success' && ' Passed' || 'Failed' }}
+            **Analysis Status:** ${{ needs.changed-files-analysis.result == 'success' && 'Completed' || ' Failed' }}
+            **Tests Status:** ${{ needs.conditional-tests.result == 'success' && ' Passed' || ' Failed' }}
             
             **Branch:** \`${{ github.head_ref }}\` → \`${{ github.base_ref }}\`
             **Author:** @${{ github.event.pull_request.user.login }}
