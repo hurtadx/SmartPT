@@ -239,6 +239,11 @@ class AuthControllerTest extends TestCase
     public function authenticated_user_can_logout()
     {
         $user = User::factory()->create();
+        
+        // Crear un token real para el usuario
+        $token = $user->createToken('test-token')->plainTextToken;
+        
+        // Actuar como el usuario autenticado
         Sanctum::actingAs($user);
 
         // Verificar que hay un token
@@ -249,7 +254,7 @@ class AuthControllerTest extends TestCase
         $response->assertStatus(200)
                 ->assertJson([
                     'success' => true,
-                    'message' => 'Sesión cerrada exitosamente'
+                    'message' => '¡Sesión cerrada exitosamente!'
                 ]);
 
         // Verificar que el token fue eliminado
