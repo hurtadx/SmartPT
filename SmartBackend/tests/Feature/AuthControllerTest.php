@@ -239,15 +239,7 @@ class AuthControllerTest extends TestCase
     public function authenticated_user_can_logout()
     {
         $user = User::factory()->create();
-        
-        // Crear un token real para el usuario
-        $token = $user->createToken('test-token')->plainTextToken;
-        
-        // Actuar como el usuario autenticado
         Sanctum::actingAs($user);
-
-        // Verificar que hay un token
-        $this->assertGreaterThan(0, $user->tokens()->count());
 
         $response = $this->postJson('/api/auth/logout');
 
@@ -256,9 +248,37 @@ class AuthControllerTest extends TestCase
                     'success' => true,
                     'message' => '¡Sesión cerrada exitosamente!'
                 ]);
+    }
+
+    /** @test */
+    public function logout_deletes_current_access_token()
+    {
+        $user = User::factory()->create([
+            'email' => 'andre@example.com',
+            'password' => Hash::make('SecurePassword123')
+        ]);
+
+        // Crear un token directamente para el usuario
+        $token = $user->createToken('test-token')->plainTextToken;
+        
+        // Verificar que el usuario tiene exactamente 1 token
+        $tokensBeforeLogout = $user->fresh()->tokens()->count();
+        $this->assertEquals(1, $tokensBeforeLogout);
+
+        // Hacer logout usando el token
+        $response = $this->postJson('/api/auth/logout', [], [
+            'Authorization' => 'Bearer ' . $token
+        ]);
+
+        $response->assertStatus(200)
+                ->assertJson([
+                    'success' => true,
+                    'message' => '¡Sesión cerrada exitosamente!'
+                ]);
 
         // Verificar que el token fue eliminado
-        $this->assertEquals(0, $user->fresh()->tokens()->count());
+        $tokensAfterLogout = $user->fresh()->tokens()->count();
+        $this->assertEquals(0, $tokensAfterLogout);
     }
 
     /** @test */
