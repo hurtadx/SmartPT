@@ -23,7 +23,7 @@ class AuthControllerTest extends TestCase
             'password_confirmation' => 'SecurePassword123'
         ];
 
-        $response = $this->postJson('/api/register', $userData);
+        $response = $this->postJson('/api/auth/register', $userData);
 
         $response->assertStatus(201)
                 ->assertJsonStructure([
@@ -63,7 +63,7 @@ class AuthControllerTest extends TestCase
             'password_confirmation' => 'SecurePassword123'
         ];
 
-        $response = $this->postJson('/api/register', $userData);
+        $response = $this->postJson('/api/auth/register', $userData);
 
         $response->assertStatus(422)
                 ->assertJsonValidationErrors(['email']);
@@ -82,7 +82,7 @@ class AuthControllerTest extends TestCase
             'password_confirmation' => 'SecurePassword123'
         ];
 
-        $response = $this->postJson('/api/register', $userData);
+        $response = $this->postJson('/api/auth/register', $userData);
 
         $response->assertStatus(422)
                 ->assertJsonValidationErrors(['email']);
@@ -98,7 +98,7 @@ class AuthControllerTest extends TestCase
             'password_confirmation' => 'DifferentPassword123' // No coincide
         ];
 
-        $response = $this->postJson('/api/register', $userData);
+        $response = $this->postJson('/api/auth/register', $userData);
 
         $response->assertStatus(422)
                 ->assertJsonValidationErrors(['password']);
@@ -114,7 +114,7 @@ class AuthControllerTest extends TestCase
             'password_confirmation' => '123'
         ];
 
-        $response = $this->postJson('/api/register', $userData);
+        $response = $this->postJson('/api/auth/register', $userData);
 
         $response->assertStatus(422)
                 ->assertJsonValidationErrors(['password']);
@@ -134,7 +134,7 @@ class AuthControllerTest extends TestCase
             'password' => 'SecurePassword123'
         ];
 
-        $response = $this->postJson('/api/login', $loginData);
+        $response = $this->postJson('/api/auth/login', $loginData);
 
         $response->assertStatus(200)
                 ->assertJsonStructure([
@@ -173,7 +173,7 @@ class AuthControllerTest extends TestCase
             'password' => 'WrongPassword123' // Contraseña incorrecta
         ];
 
-        $response = $this->postJson('/api/login', $loginData);
+        $response = $this->postJson('/api/auth/login', $loginData);
 
         $response->assertStatus(422)
                 ->assertJson([
@@ -190,7 +190,7 @@ class AuthControllerTest extends TestCase
             'password' => 'SomePassword123'
         ];
 
-        $response = $this->postJson('/api/login', $loginData);
+        $response = $this->postJson('/api/auth/login', $loginData);
 
         $response->assertStatus(422)
                 ->assertJson([
@@ -202,7 +202,7 @@ class AuthControllerTest extends TestCase
     /** @test */
     public function login_requires_email_and_password()
     {
-        $response = $this->postJson('/api/login', []);
+        $response = $this->postJson('/api/auth/login', []);
 
         $response->assertStatus(422)
                 ->assertJsonValidationErrors(['email', 'password']);
@@ -227,7 +227,7 @@ class AuthControllerTest extends TestCase
             'password' => 'SecurePassword123'
         ];
 
-        $response = $this->postJson('/api/login', $loginData);
+        $response = $this->postJson('/api/auth/login', $loginData);
 
         $response->assertStatus(200);
         
@@ -244,7 +244,7 @@ class AuthControllerTest extends TestCase
         // Verificar que hay un token
         $this->assertGreaterThan(0, $user->tokens()->count());
 
-        $response = $this->postJson('/api/logout');
+        $response = $this->postJson('/api/auth/logout');
 
         $response->assertStatus(200)
                 ->assertJson([
@@ -259,7 +259,7 @@ class AuthControllerTest extends TestCase
     /** @test */
     public function unauthenticated_user_cannot_logout()
     {
-        $response = $this->postJson('/api/logout');
+        $response = $this->postJson('/api/auth/logout');
 
         $response->assertStatus(401);
     }
@@ -273,7 +273,7 @@ class AuthControllerTest extends TestCase
         ]);
         Sanctum::actingAs($user);
 
-        $response = $this->getJson('/api/user');
+        $response = $this->getJson('/api/auth/me');
 
         $response->assertStatus(200)
                 ->assertJsonStructure([
@@ -297,7 +297,7 @@ class AuthControllerTest extends TestCase
     /** @test */
     public function unauthenticated_user_cannot_get_profile()
     {
-        $response = $this->getJson('/api/user');
+        $response = $this->getJson('/api/auth/me');
 
         $response->assertStatus(401);
     }
@@ -312,7 +312,7 @@ class AuthControllerTest extends TestCase
             'password_confirmation' => 'PlainTextPassword123'
         ];
 
-        $response = $this->postJson('/api/register', $userData);
+        $response = $this->postJson('/api/auth/register', $userData);
 
         $response->assertStatus(201);
 
@@ -336,7 +336,7 @@ class AuthControllerTest extends TestCase
             'password' => 'SecurePassword123'
         ];
 
-        $response = $this->postJson('/api/login', $loginData);
+        $response = $this->postJson('/api/auth/login', $loginData);
 
         $response->assertStatus(200);
         
@@ -355,7 +355,7 @@ class AuthControllerTest extends TestCase
             'password_confirmation' => 'SecurePassword123'
         ];
 
-        $response = $this->postJson('/api/register', $userData);
+        $response = $this->postJson('/api/auth/register', $userData);
 
         $response->assertStatus(201);
 
