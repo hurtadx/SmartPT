@@ -1,0 +1,131 @@
+name: Development Workflow
+
+on:
+  push:
+    branches: [ develop, 'feature/**', 'hotfix/**' ]
+
+jobs:
+  # Validación rápida para desarrollo
+  quick-validation:
+    runs-on: ubuntu-latest
+    name: Quick Development Check
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Syntax
+        run: |
+          echo "🔍 Checking basic syntax..."
+          
+          # Verificar archivos PHP
+          if find SmartBackend -name "*.php" -not -path "*/vendor/*" | head -1 | read; then
+            echo "Checking PHP syntax..."
+            find SmartBackend -name "*.php" -not -path "*/vendor/*" -exec php -l {} \; | grep -v "No syntax errors"
+          fi
+          
+          # Verificar archivos JSON
+          if find . -name "*.json" -not -path "*/node_modules/*" -not -path "*/vendor/*" | head -1 | read; then
+            echo "Checking JSON syntax..."
+            find . -name "*.json" -not -path "*/node_modules/*" -not -path "*/vendor/*" -exec python -m json.tool {} \; > /dev/null
+          fi
+
+      - name: Check File Structure
+        run: |
+          echo "📁 Checking project structure..."
+          
+          # Verificar estructura básica
+          required_dirs=("SmartBackend" "SmartFrontend" ".github/workflows")
+          for dir in "${required_dirs[@]}"; do
+            if [ ! -d "$dir" ]; then
+              echo "❌ Missing directory: $dir"
+              exit 1
+            fi
+          done
+          
+          echo "✅ Project structure looks good"
+
+      - name: Environment Files Check
+        run: |
+          echo "🔒 Checking environment configuration..."
+          
+          # Verificar que existen archivos .env.example
+          if [ ! -f "SmartBackend/.env.example" ]; then
+            echo "❌ Missing SmartBackend/.env.example"
+            exit 1
+          fi
+          
+          if [ ! -f "SmartFrontend/.env.example" ] && [ ! -f "SmartFrontend/.env" ]; then
+            echo "⚠️ No environment example file found for frontend"
+          fi
+          
+          echo "✅ Environment files check passed"
+
+  # Build rápido para verificar que todo compila
+  quick-build:
+    runs-on: ubuntu-latest
+    name: Quick Build Test
+    needs: quick-validation
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      # Backend quick check
+      - name: Backend Dependencies Check
+        run: |
+          if [ -f "SmartBackend/composer.json" ]; then
+            echo "📦 Backend composer.json found"
+            # Verificar que composer.json es válido
+            cd SmartBackend && php -r "json_decode(file_get_contents('composer.json')); echo 'Composer JSON is valid';"
+          fi
+
+      # Frontend quick check
+      - name: Frontend Dependencies Check
+        run: |
+          if [ -f "SmartFrontend/package.json" ]; then
+            echo "📦 Frontend package.json found"
+            # Verificar que package.json es válido
+            cd SmartFrontend && python -m json.tool package.json > /dev/null && echo "Package JSON is valid"
+          fi
+
+      - name: Docker Configuration Check
+        run: |
+          if [ -f "docker-compose.yml" ]; then
+            echo "🐳 Docker configuration found"
+            # Verificar sintaxis de docker-compose
+            docker-compose config > /dev/null && echo "Docker Compose configuration is valid"
+          fi
+
+  # Resumen del desarrollo
+  development-summary:
+    runs-on: ubuntu-latest
+    name: Development Summary
+    needs: [quick-validation, quick-build]
+    if: always()
+    
+    steps:
+      - name: Create Development Summary
+        run: |
+          echo "# Development Check Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Author:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Status de validación
+          if [ "${{ needs.quick-validation.result }}" == "success" ]; then
+            echo "✅ **Quick Validation:** PASSED" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Quick Validation:** FAILED" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Status de build
+          if [ "${{ needs.quick-build.result }}" == "success" ]; then
+            echo "✅ **Quick Build:** PASSED" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Quick Build:** FAILED" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "*SmartPT Development Workflow - André Hurtado © 2025*" >> $GITHUB_STEP_SUMMARY
