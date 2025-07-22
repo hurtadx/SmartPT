@@ -60,6 +60,7 @@ jobs:
         env:
           POSTGRES_PASSWORD: password
           POSTGRES_DB: smartpt_test
+          POSTGRES_USER: postgres
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -77,19 +78,17 @@ jobs:
           php-version: '8.2'
           extensions: mbstring, dom, fileinfo, pgsql, pdo_pgsql
 
-      - name: Copy Environment File
-        working-directory: ./SmartBackend
-        run: cp .env.example .env
-
       - name: Configure Test Database
         working-directory: ./SmartBackend
         run: |
-          sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=pgsql/' .env
-          sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env
-          sed -i 's/DB_PORT=.*/DB_PORT=5432/' .env
-          sed -i 's/DB_DATABASE=.*/DB_DATABASE=smartpt_test/' .env
-          sed -i 's/DB_USERNAME=.*/DB_USERNAME=postgres/' .env
-          sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=password/' .env
+          cp .env.example .env
+          # Configurar base de datos PostgreSQL para testing
+          echo "DB_CONNECTION=pgsql" >> .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=5432" >> .env
+          echo "DB_DATABASE=smartpt_test" >> .env
+          echo "DB_USERNAME=postgres" >> .env
+          echo "DB_PASSWORD=password" >> .env
 
       - name: Install Dependencies
         working-directory: ./SmartBackend
