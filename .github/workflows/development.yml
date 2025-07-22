@@ -92,7 +92,7 @@ jobs:
           if [ -f "docker-compose.yml" ]; then
             echo " Docker configuration found"
             # Verificar sintaxis de docker-compose
-            docker-compose config > /dev/null && echo "Docker Compose configuration is valid"
+            docker compose config > /dev/null && echo "Docker Compose configuration is valid"
           fi
 
   # Resumen del desarrollo
