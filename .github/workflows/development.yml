@@ -20,7 +20,7 @@ jobs:
           # Verificar archivos PHP
           if find SmartBackend -name "*.php" -not -path "*/vendor/*" | head -1 | read; then
             echo "Checking PHP syntax..."
-            find SmartBackend -name "*.php" -not -path "*/vendor/*" -exec php -l {} \; | grep -v "No syntax errors"
+            find SmartBackend -name "*.php" -not -path "*/vendor/*" -exec php -l {} \;
           fi
           
           # Verificar archivos JSON
