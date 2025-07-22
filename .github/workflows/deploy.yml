@@ -35,9 +35,9 @@ jobs:
       postgres:
         image: postgres:15
         env:
-          POSTGRES_DB: smartpt_prod_test
-          POSTGRES_USER: smartpt
-          POSTGRES_PASSWORD: secret
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: smartpt_test
+          POSTGRES_USER: postgres
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -65,19 +65,16 @@ jobs:
         working-directory: ./SmartBackend
         run: |
           cp .env.example .env
+          # Configurar base de datos PostgreSQL para testing
+          echo "DB_CONNECTION=pgsql" >> .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=5432" >> .env
+          echo "DB_DATABASE=smartpt_test" >> .env
+          echo "DB_USERNAME=postgres" >> .env
+          echo "DB_PASSWORD=password" >> .env
           php artisan key:generate
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
+          php artisan migrate --force
           php artisan test
-        env:
-          APP_ENV: production
-          DB_CONNECTION: pgsql
-          DB_HOST: localhost
-          DB_PORT: 5432
-          DB_DATABASE: smartpt_prod_test
-          DB_USERNAME: smartpt
-          DB_PASSWORD: secret
 
       # Frontend Tests
       - name: Setup Node.js
