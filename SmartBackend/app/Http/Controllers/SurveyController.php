@@ -9,13 +9,7 @@ use Illuminate\Http\Request;
 
 class SurveyController extends Controller
 {
-    /**
-     * Constructor - Todas las rutas necesitan autenticación
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:sanctum');
-    }
+    // Las rutas están protegidas por middleware auth:sanctum en las rutas
 
     /**
      * Obtener las preguntas de la encuesta
