@@ -8,6 +8,8 @@ use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -108,17 +110,23 @@ class AuthController extends Controller
     {
         try {
             // Eliminar el token actual
-            $request->user()->currentAccessToken()->delete();
+            $currentToken = $request->user()->currentAccessToken();
+            
+            // Verificar si es un token real (no TransientToken de testing)
+            if ($currentToken && !($currentToken instanceof \Laravel\Sanctum\TransientToken)) {
+                $currentToken->delete();
+            }
 
             return response()->json([
                 'success' => true,
                 'message' => '¡Sesión cerrada exitosamente!',
-            ], 200);
-
-        } catch (\Exception $e) {
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error en logout: ' . $e->getMessage());
+            
             return response()->json([
                 'success' => false,
-                'message' => 'Error al cerrar sesión: ' . $e->getMessage(),
+                'message' => 'Error al cerrar sesión',
             ], 500);
         }
     }

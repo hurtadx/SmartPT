@@ -15,12 +15,12 @@ jobs:
 
       - name: Check Syntax
         run: |
-          echo "🔍 Checking basic syntax..."
+          echo "Checking basic syntax..."
           
           # Verificar archivos PHP
           if find SmartBackend -name "*.php" -not -path "*/vendor/*" | head -1 | read; then
             echo "Checking PHP syntax..."
-            find SmartBackend -name "*.php" -not -path "*/vendor/*" -exec php -l {} \; | grep -v "No syntax errors"
+            find SmartBackend -name "*.php" -not -path "*/vendor/*" -exec php -l {} \;
           fi
           
           # Verificar archivos JSON
@@ -31,34 +31,34 @@ jobs:
 
       - name: Check File Structure
         run: |
-          echo "📁 Checking project structure..."
+          echo " Checking project structure..."
           
           # Verificar estructura básica
           required_dirs=("SmartBackend" "SmartFrontend" ".github/workflows")
           for dir in "${required_dirs[@]}"; do
             if [ ! -d "$dir" ]; then
-              echo "❌ Missing directory: $dir"
+              echo " Missing directory: $dir"
               exit 1
             fi
           done
           
-          echo "✅ Project structure looks good"
+          echo " Project structure looks good"
 
       - name: Environment Files Check
         run: |
-          echo "🔒 Checking environment configuration..."
+          echo " Checking environment configuration..."
           
           # Verificar que existen archivos .env.example
           if [ ! -f "SmartBackend/.env.example" ]; then
-            echo "❌ Missing SmartBackend/.env.example"
+            echo " Missing SmartBackend/.env.example"
             exit 1
           fi
           
           if [ ! -f "SmartFrontend/.env.example" ] && [ ! -f "SmartFrontend/.env" ]; then
-            echo "⚠️ No environment example file found for frontend"
+            echo " No environment example file found for frontend"
           fi
           
-          echo "✅ Environment files check passed"
+          echo " Environment files check passed"
 
   # Build rápido para verificar que todo compila
   quick-build:
@@ -73,7 +73,7 @@ jobs:
       - name: Backend Dependencies Check
         run: |
           if [ -f "SmartBackend/composer.json" ]; then
-            echo "📦 Backend composer.json found"
+            echo "Backend composer.json found"
             # Verificar que composer.json es válido
             cd SmartBackend && php -r "json_decode(file_get_contents('composer.json')); echo 'Composer JSON is valid';"
           fi
@@ -82,7 +82,7 @@ jobs:
       - name: Frontend Dependencies Check
         run: |
           if [ -f "SmartFrontend/package.json" ]; then
-            echo "📦 Frontend package.json found"
+            echo " Frontend package.json found"
             # Verificar que package.json es válido
             cd SmartFrontend && python -m json.tool package.json > /dev/null && echo "Package JSON is valid"
           fi
@@ -90,9 +90,9 @@ jobs:
       - name: Docker Configuration Check
         run: |
           if [ -f "docker-compose.yml" ]; then
-            echo "🐳 Docker configuration found"
+            echo " Docker configuration found"
             # Verificar sintaxis de docker-compose
-            docker-compose config > /dev/null && echo "Docker Compose configuration is valid"
+            docker compose config > /dev/null && echo "Docker Compose configuration is valid"
           fi
 
   # Resumen del desarrollo
@@ -114,16 +114,16 @@ jobs:
           
           # Status de validación
           if [ "${{ needs.quick-validation.result }}" == "success" ]; then
-            echo "✅ **Quick Validation:** PASSED" >> $GITHUB_STEP_SUMMARY
+            echo "**Quick Validation:** PASSED" >> $GITHUB_STEP_SUMMARY
           else
-            echo "❌ **Quick Validation:** FAILED" >> $GITHUB_STEP_SUMMARY
+            echo " **Quick Validation:** FAILED" >> $GITHUB_STEP_SUMMARY
           fi
           
           # Status de build
           if [ "${{ needs.quick-build.result }}" == "success" ]; then
-            echo "✅ **Quick Build:** PASSED" >> $GITHUB_STEP_SUMMARY
+            echo " **Quick Build:** PASSED" >> $GITHUB_STEP_SUMMARY
           else
-            echo "❌ **Quick Build:** FAILED" >> $GITHUB_STEP_SUMMARY
+            echo " **Quick Build:** FAILED" >> $GITHUB_STEP_SUMMARY
           fi
           
           echo "" >> $GITHUB_STEP_SUMMARY
