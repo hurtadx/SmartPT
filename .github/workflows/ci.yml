@@ -157,19 +157,19 @@ jobs:
       - name: Test Docker Compose Configuration
         run: |
           # Verificar que docker-compose.yml es válido
-          docker-compose config
+          docker compose config
           # Intentar build sin push
-          docker-compose build --no-cache
+          docker compose build --no-cache
 
       - name: Test Container Startup
         run: |
           # Verificar que los contenedores pueden iniciarse
-          docker-compose up -d --wait
-          docker-compose ps
+          docker compose up -d --wait
+          docker compose ps
           # Verificar conectividad básica
           sleep 10
           curl -f http://localhost:8000/api/test || exit 1
-          docker-compose down
+          docker compose down
 
   # Security Scan
   security-scan:
