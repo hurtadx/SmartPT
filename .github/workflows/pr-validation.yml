@@ -1,5 +1,9 @@
 name: Pull Request Validation
 
+permissions:
+  contents: write
+  pull-requests: write
+
 on:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -20,7 +24,7 @@ jobs:
         run: |
           # Verificar que el título del PR sigue convenciones
           PR_TITLE="${{ github.event.pull_request.title }}"
-          if [[ ! "$PR_TITLE" =~ ^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+ ]]; then
+          if ! echo "$PR_TITLE" | grep -Eq '^(feat|fix|docs|style|refactor|test|chore)(\([a-zA-Z0-9_-]+\))?: .+'; then
             echo "PR title must follow conventional commits format"
             echo "Examples: 'feat: add user authentication', 'fix(auth): resolve login bug'"
             exit 1
@@ -56,13 +60,17 @@ jobs:
         id: changed-php
         run: |
           CHANGED_PHP=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep '\.php$' || true)
-          echo "files=$CHANGED_PHP" >> $GITHUB_OUTPUT
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGED_PHP" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Get Changed JS/TS Files  
         id: changed-js
         run: |
           CHANGED_JS=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '\.(js|jsx|ts|tsx)$' || true)
-          echo "files=$CHANGED_JS" >> $GITHUB_OUTPUT
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGED_JS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Analyze PHP Files
         if: steps.changed-php.outputs.files != ''
