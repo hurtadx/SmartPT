@@ -1,7 +1,5 @@
 # Prueba tecnica Smart s.
 
-# En la raíz del proyecto SmartPT
-cd "c:\Users\andre\SmartPT"
 
 # Construir y levantar todos los servicios
 docker-compose up --build

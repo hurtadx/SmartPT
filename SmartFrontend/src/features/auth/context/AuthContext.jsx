@@ -2,19 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { AuthContext } from './AuthContextCreator';
 import { authService } from '../services/authService';
 
-// Provider del contexto
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Verificar autenticación al cargar
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const token = localStorage.getItem('token');
         if (token) {
-          // Verificar si el token es válido obteniendo info del usuario
           const response = await authService.me();
           if (response.success) {
             setUser(response.data.user);
@@ -24,8 +21,7 @@ export const AuthProvider = ({ children }) => {
             logout();
           }
         }
-      } catch (error) {
-        console.error('Error verificando autenticación:', error);
+      } catch {
         logout();
       } finally {
         setLoading(false);
@@ -49,8 +45,7 @@ export const AuthProvider = ({ children }) => {
           await logout();
         }
       }
-    } catch (error) {
-      console.error('Error verificando autenticación:', error);
+    } catch {
       await logout();
     } finally {
       setLoading(false);
@@ -96,8 +91,8 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await authService.logout();
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+    } catch {
+      // Ignorar errores al cerrar sesión
     } finally {
       setUser(null);
       setIsAuthenticated(false);
