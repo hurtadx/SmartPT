@@ -25,7 +25,7 @@ export const SurveyPage = () => {
         }
       } catch (error) {
         console.error('Error checking survey status:', error);
-        // Si hay error al verificar el estado, permitir que continue (mejor UX)
+        
       } finally {
         setIsCheckingStatus(false);
       }
