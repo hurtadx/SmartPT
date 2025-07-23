@@ -1,8 +1,6 @@
 import api from '../../../shared/services/api';
 
-// Servicios de encuestas
 export const surveyService = {
-  // Obtener preguntas de la encuesta
   getQuestions: async () => {
     try {
       const response = await api.get('/survey/questions');
@@ -12,7 +10,6 @@ export const surveyService = {
     }
   },
 
-  // Enviar respuestas de la encuesta
   submitSurvey: async (answers) => {
     try {
       const response = await api.post('/survey/submit', answers);
@@ -22,7 +19,6 @@ export const surveyService = {
     }
   },
 
-  // Obtener resultados de la encuesta
   getResults: async () => {
     try {
       const response = await api.get('/survey/results');
@@ -32,7 +28,6 @@ export const surveyService = {
     }
   },
 
-  // Verificar estado de la encuesta
   checkStatus: async () => {
     try {
       const response = await api.get('/survey/status');
