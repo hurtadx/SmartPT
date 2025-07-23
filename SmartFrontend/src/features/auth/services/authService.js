@@ -1,6 +1,5 @@
 import api from '../../../shared/services/api';
 
-// Servicios de autenticación
 export const authService = {
   // Registrar usuario
   register: async (userData) => {
@@ -40,8 +39,8 @@ export const authService = {
   logout: async () => {
     try {
       await api.post('/auth/logout');
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+    } catch {
+      // Ignorar errores al cerrar sesión
     } finally {
       // Limpiar datos locales siempre
       localStorage.removeItem('token');
@@ -49,7 +48,6 @@ export const authService = {
     }
   },
 
-  // Obtener información del usuario
   me: async () => {
     try {
       const response = await api.get('/auth/me');
@@ -59,13 +57,11 @@ export const authService = {
     }
   },
 
-  // Verificar si hay token válido
   isAuthenticated: () => {
     const token = localStorage.getItem('token');
     return !!token;
   },
 
-  // Obtener usuario actual desde localStorage
   getCurrentUser: () => {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
