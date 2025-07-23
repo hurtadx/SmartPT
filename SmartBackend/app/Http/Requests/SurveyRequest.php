@@ -21,6 +21,9 @@ class SurveyRequest extends FormRequest
      */
     public function rules(): array
     {
+        // Log para debug
+        \Log::info('SurveyRequest validation - Input data:', $this->all());
+        
         return [
             'favorite_framework' => 'required|string|max:1000',
             'experience_level' => 'required|in:Junior,Mid,Senior',
