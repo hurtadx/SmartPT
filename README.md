@@ -1,3 +1,4 @@
+
 ## Inicialización automática del backend (Docker)
 
 Al iniciar el contenedor del backend con Docker Compose:
