@@ -177,7 +177,7 @@ jobs:
 
       - name: Deploy to Staging
         run: |
-          echo "🚀 Deploying to staging environment..."
+          echo "Deploying to staging environment..."
           echo "Backend Image: ${{ needs.build-images.outputs.backend-image }}"
           echo "Frontend Image: ${{ needs.build-images.outputs.frontend-image }}"
           
@@ -185,7 +185,7 @@ jobs:
 
       - name: Run integration tests
         run: |
-          echo "🧪 Running integration tests on staging..."
+          echo " Running integration tests on staging..."
          
   # Deploy a producción
   deploy-production:

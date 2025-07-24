@@ -206,7 +206,7 @@ jobs:
       
       - name: Deploy to Preview Environment
         run: |
-          echo "🚀 Deploying PR #${{ github.event.number }} to preview environment..."
+          echo "Deploying PR #${{ github.event.number }} to preview environment..."
           echo "Preview URL: https://smartpt-pr-${{ github.event.number }}.preview.com"
 
   # Notification
