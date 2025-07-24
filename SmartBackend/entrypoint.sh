@@ -17,15 +17,23 @@ while ! nc -z postgres 5432; do
 done
 echo "PostgreSQL está listo!"
 
-# Copiar archivo de entorno para Docker
+
+# Copiar .env si no existe
 if [ ! -f .env ]; then
-    echo "Configurando variables de entorno..."
-    cp .env.docker .env
+    if [ -f .env.docker ]; then
+        echo "Configurando variables de entorno..."
+        cp .env.docker .env
+    else
+        echo "No se encontró .env.docker, usando .env.example..."
+        cp .env.example .env
+    fi
 fi
 
-# Generar clave de aplicación si no existe
-echo " Generando clave de aplicación..."
-php artisan key:generate --force
+# Generar clave de aplicación si no existe o está vacía
+if ! grep -q "^APP_KEY=" .env || grep -q "^APP_KEY=$" .env; then
+    echo " Generando clave de aplicación..."
+    php artisan key:generate --force
+fi
 
 # Ejecutar migraciones
 echo "Ejecutando migraciones..."

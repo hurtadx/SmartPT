@@ -13,7 +13,7 @@ class AuthControllerTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_can_register_with_valid_data()
     {
         $userData = [
@@ -53,7 +53,7 @@ class AuthControllerTest extends TestCase
         $this->assertNotEmpty($responseData['data']['token']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_registration_requires_valid_email()
     {
         $userData = [
@@ -69,7 +69,7 @@ class AuthControllerTest extends TestCase
                 ->assertJsonValidationErrors(['email']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_registration_requires_unique_email()
     {
         // Crear usuario existente
@@ -88,7 +88,7 @@ class AuthControllerTest extends TestCase
                 ->assertJsonValidationErrors(['email']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_registration_requires_password_confirmation()
     {
         $userData = [
@@ -104,7 +104,7 @@ class AuthControllerTest extends TestCase
                 ->assertJsonValidationErrors(['password']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_registration_requires_minimum_password_length()
     {
         $userData = [
@@ -120,7 +120,7 @@ class AuthControllerTest extends TestCase
                 ->assertJsonValidationErrors(['password']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_can_login_with_valid_credentials()
     {
         // Crear usuario con contraseña conocida
@@ -159,7 +159,7 @@ class AuthControllerTest extends TestCase
         $this->assertFalse($responseData['data']['user']['has_completed_survey']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_cannot_login_with_invalid_credentials()
     {
         // Crear usuario
@@ -182,7 +182,7 @@ class AuthControllerTest extends TestCase
                 ]);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_cannot_login_with_nonexistent_email()
     {
         $loginData = [
@@ -199,7 +199,7 @@ class AuthControllerTest extends TestCase
                 ]);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function login_requires_email_and_password()
     {
         $response = $this->postJson('/api/auth/login', []);
@@ -208,7 +208,7 @@ class AuthControllerTest extends TestCase
                 ->assertJsonValidationErrors(['email', 'password']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function login_deletes_old_tokens_and_creates_new_one()
     {
         $user = User::factory()->create([
@@ -235,7 +235,7 @@ class AuthControllerTest extends TestCase
         $this->assertEquals(1, $user->fresh()->tokens()->count());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authenticated_user_can_logout()
     {
         $user = User::factory()->create();
@@ -250,7 +250,7 @@ class AuthControllerTest extends TestCase
                 ]);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function logout_deletes_current_access_token()
     {
         $user = User::factory()->create([
@@ -281,7 +281,7 @@ class AuthControllerTest extends TestCase
         $this->assertEquals(0, $tokensAfterLogout);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function unauthenticated_user_cannot_logout()
     {
         $response = $this->postJson('/api/auth/logout');
@@ -289,7 +289,7 @@ class AuthControllerTest extends TestCase
         $response->assertStatus(401);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authenticated_user_can_get_profile()
     {
         $user = User::factory()->create([
@@ -319,7 +319,7 @@ class AuthControllerTest extends TestCase
         $this->assertEquals($user->email, $responseData['data']['user']['email']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function unauthenticated_user_cannot_get_profile()
     {
         $response = $this->getJson('/api/auth/me');
@@ -327,7 +327,7 @@ class AuthControllerTest extends TestCase
         $response->assertStatus(401);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function registration_password_is_hashed()
     {
         $userData = [
@@ -348,7 +348,7 @@ class AuthControllerTest extends TestCase
         $this->assertTrue(Hash::check('PlainTextPassword123', $user->password));
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function login_includes_survey_completion_status()
     {
         $user = User::factory()->create([
@@ -370,7 +370,7 @@ class AuthControllerTest extends TestCase
         $this->assertIsBool($responseData['data']['user']['has_completed_survey']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function registration_creates_user_with_correct_attributes()
     {
         $userData = [

@@ -1,3 +1,33 @@
+## Inicialización automática del backend (Docker)
+
+Al iniciar el contenedor del backend con Docker Compose:
+
+- Se copian automáticamente las variables de entorno desde `.env.docker` (o `.env.example` si no existe).
+- Se genera la clave de aplicación de Laravel si es necesario.
+- Se instalan las dependencias de Composer si faltan.
+- Se ejecutan las migraciones y seeders (los usuarios de prueba no se duplican).
+- Se limpian y optimizan los cachés de Laravel.
+- El servidor web se inicia automáticamente.
+
+**No necesitas ejecutar comandos manuales para preparar el entorno.**
+Solo corre:
+
+```bash
+docker compose up -d --build
+```
+
+Y el backend estará listo para usar y para correr tests.
+
+## Cómo ejecutar los tests
+
+Para correr los tests de backend desde Docker:
+
+```bash
+docker compose exec backend php artisan test
+```
+
+Esto ejecuta todos los tests unitarios y de integración de Laravel. No necesitas pasos previos, ya que la base de datos y el entorno se preparan automáticamente.
+
 # SmartPT
 
 Sistema de gestión de encuestas desarrollado con Laravel y React.

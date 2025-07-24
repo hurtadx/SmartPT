@@ -12,7 +12,7 @@ class UserModelTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_has_correct_fillable_attributes()
     {
         $fillableAttributes = ['name', 'email', 'password'];
@@ -21,7 +21,7 @@ class UserModelTest extends TestCase
         $this->assertEquals($fillableAttributes, $user->getFillable());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_hides_sensitive_attributes()
     {
         $hiddenAttributes = ['password', 'remember_token'];
@@ -30,7 +30,7 @@ class UserModelTest extends TestCase
         $this->assertEquals($hiddenAttributes, $user->getHidden());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_password_is_automatically_hashed()
     {
         $user = User::factory()->create([
@@ -41,7 +41,7 @@ class UserModelTest extends TestCase
         $this->assertTrue(Hash::check('plain_password', $user->password));
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_can_have_multiple_survey_responses()
     {
         $user = User::factory()->create();
@@ -57,7 +57,7 @@ class UserModelTest extends TestCase
         $this->assertTrue($user->surveyResponses->contains($response3));
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function has_completed_survey_returns_false_when_no_survey_responses()
     {
         $user = User::factory()->create();
@@ -65,7 +65,7 @@ class UserModelTest extends TestCase
         $this->assertFalse($user->hasCompletedSurvey());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function has_completed_survey_returns_false_when_survey_not_completed()
     {
         $user = User::factory()->create();
@@ -79,7 +79,7 @@ class UserModelTest extends TestCase
         $this->assertFalse($user->hasCompletedSurvey());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function has_completed_survey_returns_true_when_survey_completed()
     {
         $user = User::factory()->create();
@@ -93,7 +93,7 @@ class UserModelTest extends TestCase
         $this->assertTrue($user->hasCompletedSurvey());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function has_completed_survey_returns_true_with_multiple_completed_surveys()
     {
         $user = User::factory()->create();
@@ -111,7 +111,7 @@ class UserModelTest extends TestCase
         $this->assertTrue($user->hasCompletedSurvey());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function latest_survey_response_returns_null_when_no_responses()
     {
         $user = User::factory()->create();
@@ -119,7 +119,7 @@ class UserModelTest extends TestCase
         $this->assertNull($user->latestSurveyResponse());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function latest_survey_response_returns_most_recent_response()
     {
         $user = User::factory()->create();
@@ -146,7 +146,7 @@ class UserModelTest extends TestCase
         $this->assertNotEquals($middleResponse->id, $latestResponse->id);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_can_be_created_with_factory()
     {
         $user = User::factory()->create([
@@ -163,7 +163,7 @@ class UserModelTest extends TestCase
         $this->assertEquals('andre@example.com', $user->email);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_factory_creates_unique_emails()
     {
         $user1 = User::factory()->create();
@@ -175,7 +175,7 @@ class UserModelTest extends TestCase
         $this->assertNotEquals($user1->email, $user3->email);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_relationship_with_survey_responses_works_correctly()
     {
         $user = User::factory()->create();
@@ -195,7 +195,7 @@ class UserModelTest extends TestCase
         $this->assertFalse($user->surveyResponses->contains($otherUserResponse));
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_survey_completion_status_is_independent_per_user()
     {
         $user1 = User::factory()->create();
@@ -211,7 +211,7 @@ class UserModelTest extends TestCase
         $this->assertFalse($user2->hasCompletedSurvey());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_latest_survey_response_is_scoped_to_user()
     {
         $user1 = User::factory()->create();
@@ -232,7 +232,7 @@ class UserModelTest extends TestCase
         $this->assertEquals($user2Response->id, $user2->latestSurveyResponse()->id);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_casts_are_properly_configured()
     {
         $user = new User();
@@ -245,7 +245,7 @@ class UserModelTest extends TestCase
         $this->assertEquals('hashed', $casts['password']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_uses_correct_traits()
     {
         $user = new User();

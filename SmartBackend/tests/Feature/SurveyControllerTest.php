@@ -18,7 +18,7 @@ class SurveyControllerTest extends TestCase
         parent::setUp();
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function unauthenticated_user_cannot_access_survey_endpoints()
     {
         // Test que usuario no autenticado no puede acceder a las encuestas
@@ -35,7 +35,7 @@ class SurveyControllerTest extends TestCase
         $response->assertStatus(401);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authenticated_user_can_get_survey_questions()
     {
         // Crear usuario autenticado
@@ -70,7 +70,7 @@ class SurveyControllerTest extends TestCase
         $this->assertEquals(5, $responseData['data']['total_questions']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authenticated_user_can_check_survey_status_when_not_completed()
     {
         // Crear usuario que no ha completado encuesta
@@ -90,7 +90,7 @@ class SurveyControllerTest extends TestCase
                 ]);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authenticated_user_can_check_survey_status_when_completed()
     {
         // Crear usuario con encuesta completada
@@ -115,7 +115,7 @@ class SurveyControllerTest extends TestCase
         $this->assertNotNull($response->json('data.completed_at'));
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authenticated_user_can_submit_survey_with_valid_data()
     {
         $user = User::factory()->create();
@@ -160,7 +160,7 @@ class SurveyControllerTest extends TestCase
         $this->assertTrue($responseData['success']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_cannot_submit_survey_twice()
     {
         // Crear usuario con encuesta ya completada
@@ -188,7 +188,7 @@ class SurveyControllerTest extends TestCase
                 ]);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function survey_submission_requires_all_required_fields()
     {
         $user = User::factory()->create();
@@ -205,7 +205,7 @@ class SurveyControllerTest extends TestCase
         $response->assertStatus(422); // Unprocessable Entity
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authenticated_user_can_get_survey_results_when_completed()
     {
         $user = User::factory()->create();
@@ -247,7 +247,7 @@ class SurveyControllerTest extends TestCase
         $this->assertEquals($user->name, $responseData['data']['survey_info']['user_name']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function user_cannot_get_results_when_survey_not_completed()
     {
         $user = User::factory()->create();
@@ -262,7 +262,7 @@ class SurveyControllerTest extends TestCase
                 ]);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function survey_questions_have_correct_structure()
     {
         $user = User::factory()->create();
@@ -289,7 +289,7 @@ class SurveyControllerTest extends TestCase
         $this->assertContains('range', $questionTypes);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function survey_submission_validates_experience_level()
     {
         $user = User::factory()->create();
@@ -307,7 +307,7 @@ class SurveyControllerTest extends TestCase
         $response->assertStatus(422);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function survey_submission_validates_teamwork_rating_range()
     {
         $user = User::factory()->create();
@@ -325,7 +325,7 @@ class SurveyControllerTest extends TestCase
         $response->assertStatus(422);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function survey_results_format_answers_correctly()
     {
         $user = User::factory()->create();

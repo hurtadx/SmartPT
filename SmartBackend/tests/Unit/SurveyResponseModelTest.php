@@ -11,7 +11,7 @@ class SurveyResponseModelTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function survey_response_has_correct_fillable_attributes()
     {
         $fillableAttributes = [
@@ -28,7 +28,7 @@ class SurveyResponseModelTest extends TestCase
         $this->assertEquals($fillableAttributes, $surveyResponse->getFillable());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function survey_response_has_correct_casts()
     {
         $surveyResponse = new SurveyResponse();
@@ -47,7 +47,7 @@ class SurveyResponseModelTest extends TestCase
         $this->assertEquals('datetime', $casts['completed_at']);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function survey_response_belongs_to_user()
     {
         $user = User::factory()->create();
@@ -59,7 +59,7 @@ class SurveyResponseModelTest extends TestCase
         $this->assertEquals($user->email, $surveyResponse->user->email);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function programming_languages_is_cast_to_array()
     {
         $languages = ['PHP', 'JavaScript', 'Python'];
@@ -72,7 +72,7 @@ class SurveyResponseModelTest extends TestCase
         $this->assertEquals($languages, $surveyResponse->programming_languages);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function agile_experience_is_cast_to_boolean()
     {
         $surveyResponse1 = SurveyResponse::factory()->create([
@@ -90,7 +90,7 @@ class SurveyResponseModelTest extends TestCase
         $this->assertFalse($surveyResponse2->agile_experience);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function teamwork_rating_is_cast_to_integer()
     {
         $surveyResponse = SurveyResponse::factory()->create([
@@ -101,7 +101,7 @@ class SurveyResponseModelTest extends TestCase
         $this->assertEquals(4, $surveyResponse->teamwork_rating);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function completed_at_is_cast_to_datetime()
     {
         $surveyResponse = SurveyResponse::factory()->create([
@@ -111,7 +111,7 @@ class SurveyResponseModelTest extends TestCase
         $this->assertInstanceOf(\Illuminate\Support\Carbon::class, $surveyResponse->completed_at);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function is_completed_returns_false_when_completed_at_is_null()
     {
         $surveyResponse = SurveyResponse::factory()->create([
@@ -121,7 +121,7 @@ class SurveyResponseModelTest extends TestCase
         $this->assertFalse($surveyResponse->isCompleted());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function is_completed_returns_true_when_completed_at_is_set()
     {
         $surveyResponse = SurveyResponse::factory()->create([
@@ -131,7 +131,7 @@ class SurveyResponseModelTest extends TestCase
         $this->assertTrue($surveyResponse->isCompleted());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function mark_as_completed_sets_completed_at_timestamp()
     {
         $surveyResponse = SurveyResponse::factory()->create([
@@ -147,7 +147,7 @@ class SurveyResponseModelTest extends TestCase
         $this->assertTrue($surveyResponse->fresh()->isCompleted());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function mark_as_completed_updates_existing_completed_at()
     {
         $originalTime = now()->subHour();
@@ -162,7 +162,7 @@ class SurveyResponseModelTest extends TestCase
         $this->assertNotEquals($originalTime->format('Y-m-d H:i:s'), $surveyResponse->fresh()->completed_at->format('Y-m-d H:i:s'));
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function survey_response_can_be_created_with_all_fields()
     {
         $user = User::factory()->create();
@@ -196,7 +196,7 @@ class SurveyResponseModelTest extends TestCase
         $this->assertTrue($surveyResponse->isCompleted());
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function survey_response_can_store_various_experience_levels()
     {
         $user = User::factory()->create();
@@ -213,7 +213,7 @@ class SurveyResponseModelTest extends TestCase
         }
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function survey_response_can_store_different_teamwork_ratings()
     {
         $user = User::factory()->create();
@@ -229,7 +229,7 @@ class SurveyResponseModelTest extends TestCase
         }
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function survey_response_can_store_empty_programming_languages_array()
     {
         $surveyResponse = SurveyResponse::factory()->create([
@@ -240,7 +240,7 @@ class SurveyResponseModelTest extends TestCase
         $this->assertEmpty($surveyResponse->programming_languages);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function survey_response_can_store_single_programming_language()
     {
         $surveyResponse = SurveyResponse::factory()->create([
@@ -252,7 +252,7 @@ class SurveyResponseModelTest extends TestCase
         $this->assertEquals(['PHP'], $surveyResponse->programming_languages);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function survey_response_uses_has_factory_trait()
     {
         $surveyResponse = new SurveyResponse();
@@ -261,7 +261,7 @@ class SurveyResponseModelTest extends TestCase
         $this->assertContains('Illuminate\Database\Eloquent\Factories\HasFactory', $traits);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function survey_response_factory_creates_valid_instance()
     {
         $user = User::factory()->create();
