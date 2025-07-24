@@ -29,9 +29,14 @@ export const HomePage = () => {
       try {
         const response = await surveyService.checkStatus();
         
+        // Verificar ambas estructuras posibles de respuesta
+        const hasCompletedSurvey = response?.data?.has_completed_survey || 
+                                   response?.has_completed_survey || 
+                                   response?.data?.hasCompleted;
+        
         setSurveyStatus({
           loading: false,
-          completed: response.success && response.data.has_completed_survey
+          completed: hasCompletedSurvey
         });
       } catch (error) {
         console.error('Error checking survey status:', error);
@@ -48,7 +53,7 @@ export const HomePage = () => {
 
   return (
     <div className="page-container">
-      <div className="home-page">
+      <div className={`home-page ${user ? 'authenticated' : ''}`}>
         <header className="home-header">
           <div className="logo-title">
             <i className="fas fa-poll-h logo-icon"></i>
@@ -64,6 +69,13 @@ export const HomePage = () => {
             </div>
           )}
         </header>
+
+        {/* Hello sticker con nombre del usuario - solo para usuarios autenticados */}
+        {user && (
+          <div className="hello-sticker-container" data-username={user.name}>
+            <span className="username-text">{user.name}</span>
+          </div>
+        )}
 
         {/* Mensaje de notificación */}
         {message && (
@@ -98,21 +110,23 @@ export const HomePage = () => {
                     </div>
                   </div>
                 ) : (
-                  <Link 
-                    to="/survey" 
-                    className="dashboard-link"
-                  >
-                    <div className="action-card">
-                      <i className="fas fa-clipboard-list card-icon"></i>
-                      <h3>
-                        {surveyStatus.loading ? 'Verificando...' : 'Llenar Encuesta'}
-                      </h3>
-                      <p>
-                        {surveyStatus.loading ? 'Verificando estado de la encuesta...' :
-                         'Completa la encuesta de desarrollo'}
-                      </p>
-                    </div>
-                  </Link>
+                  <div className={`dashboard-link ${surveyStatus.loading ? 'disabled-link' : ''}`}>
+                    {surveyStatus.loading ? (
+                      <div className="action-card disabled">
+                        <i className="fas fa-spinner fa-spin card-icon"></i>
+                        <h3>Verificando...</h3>
+                        <p>Verificando estado de la encuesta...</p>
+                      </div>
+                    ) : (
+                      <Link to="/survey" className="dashboard-link">
+                        <div className="action-card">
+                          <i className="fas fa-clipboard-list card-icon"></i>
+                          <h3>Llenar Encuesta</h3>
+                          <p>Completa la encuesta de desarrollo</p>
+                        </div>
+                      </Link>
+                    )}
+                  </div>
                 )}
                 
                 {/* Tarjeta de Resultados */}
