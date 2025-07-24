@@ -16,7 +16,12 @@ export const SurveyPage = () => {
         setIsCheckingStatus(true);
         const response = await surveyService.checkStatus();
         
-        if (response.success && response.data.hasCompleted) {
+        // Verificar ambas estructuras posibles de respuesta
+        const hasCompletedSurvey = response?.data?.has_completed_survey || 
+                                   response?.has_completed_survey || 
+                                   response?.data?.hasCompleted;
+        
+        if (hasCompletedSurvey) {
           setHasCompleted(true);
           // Redirigir automáticamente a resultados después de 3 segundos
           setTimeout(() => {
@@ -25,7 +30,8 @@ export const SurveyPage = () => {
         }
       } catch (error) {
         console.error('Error checking survey status:', error);
-        
+        // En caso de error, redirigir al home por seguridad
+        navigate('/', { replace: true });
       } finally {
         setIsCheckingStatus(false);
       }
