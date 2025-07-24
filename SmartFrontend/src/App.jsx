@@ -50,6 +50,11 @@ function App() {
             />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
+          
+          {/* Footer global */}
+          <div className="app-footer">
+            <p className="credit">Hecho por Andres Hurtado Molina</p>
+          </div>
         </div>
       </Router>
     </AuthProvider>

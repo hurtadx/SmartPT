@@ -1,58 +1,178 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SmartPT Backend
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+API REST desarrollada en Laravel para el sistema de gestión de encuestas SmartPT.
 
-## About Laravel
+## Descripción
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Backend que proporciona servicios de autenticación, gestión de usuarios y manejo de encuestas. Utiliza Laravel Sanctum para autenticación basada en tokens y PostgreSQL como base de datos.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tecnologías
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.2
+- Laravel 12.0
+- Laravel Sanctum 4.0
+- PostgreSQL 15
+- Docker
 
-## Learning Laravel
+## Estructura del Proyecto
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```
+SmartBackend/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── AuthController.php
+│   │   │   └── SurveyController.php
+│   │   └── Requests/
+│   │       ├── LoginRequest.php
+│   │       ├── RegisterRequest.php
+│   │       └── SurveyRequest.php
+│   └── Models/
+│       ├── User.php
+│       └── SurveyResponse.php
+├── database/
+│   └── migrations/
+└── routes/
+    └── api.php
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Instalación
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Con Docker (Recomendado)
 
-## Laravel Sponsors
+1. Desde el directorio raíz del proyecto:
+```bash
+docker-compose up -d
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. Ejecutar migraciones:
+```bash
+docker-compose exec backend php artisan migrate
+```
 
-### Premium Partners
+### Instalación Local
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+1. Clonar el repositorio:
+```bash
+git clone [URL_DEL_REPOSITORIO]
+cd SmartPT-Backend
+```
 
-## Contributing
+2. Instalar dependencias:
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. Configurar el archivo de entorno:
+```bash
+cp .env.example .env
+```
 
-## Code of Conduct
+4. Generar la clave de la aplicación:
+```bash
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+5. Configurar la base de datos en el archivo `.env`:
+```
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=smart_pt
+DB_USERNAME=tu_usuario
+DB_PASSWORD=tu_contraseña
+```
 
-## Security Vulnerabilities
+6. Ejecutar migraciones:
+```bash
+php artisan migrate
+```
+
+7. Iniciar el servidor:
+```bash
+php artisan serve
+```
+
+## Configuración
+
+### Variables de Entorno
+
+El archivo `.env.example` incluye todas las variables necesarias:
+
+```
+APP_NAME=SmartPT
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_TIMEZONE=UTC
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=smart_pt
+DB_USERNAME=postgres
+DB_PASSWORD=
+
+SANCTUM_STATEFUL_DOMAINS=localhost:5173
+```
+
+## API Endpoints
+
+### Autenticación
+
+#### POST /api/register
+**Request Body:**
+```json
+{
+    "name": "string",
+    "email": "string",
+    "password": "string",
+    "password_confirmation": "string"
+}
+```
+
+#### POST /api/login
+**Request Body:**
+```json
+{
+    "email": "string",
+    "password": "string"
+}
+```
+
+#### POST /api/logout
+**Headers:** Authorization: Bearer {token}
+
+#### GET /api/me
+**Headers:** Authorization: Bearer {token}
+
+### Encuestas
+
+#### GET /api/survey/status
+Verificar estado de la encuesta del usuario.
+
+#### POST /api/survey/submit
+Enviar respuestas de la encuesta.
+
+#### GET /api/survey/results
+Obtener resultados de la encuesta.
+
+## Base de Datos
+
+### Migraciones
+- `create_users_table`
+- `create_survey_responses_table`
+
+### Modelos
+- **User**: Autenticación con Sanctum
+- **SurveyResponse**: Respuestas de encuesta
+
+## Testing
+
+```bash
+php artisan test
+```
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
