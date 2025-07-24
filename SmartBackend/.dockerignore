@@ -1,11 +1,56 @@
+# Dependencies
 node_modules
 npm-debug.log
-vendor
+package-lock.json
+
+# Environment files
 .env
+.env.*
+!.env.docker
+
+# Git
 .git
 .gitignore
+.gitattributes
+
+# Documentation
 README.md
+CHANGELOG.md
+.styleci.yml
+.editorconfig
+
+# Docker
 Dockerfile
 .dockerignore
+
+# Development files
+*.log
+tests/
+.phpunit.result.cache
+phpunit.xml
+
+# Backend dependencies
+vendor/
+
+# Excluir frontend
+SmartFrontend/
+
+# Archivos temporales
+*.tmp
+*.swp
+
+# Storage & Cache (preservar estructura)
 storage/logs/*
+!storage/logs/.gitkeep
 bootstrap/cache/*
+!bootstrap/cache/.gitkeep
+
+# Debugging scripts
+debug_*.php
+check_surveys.php
+clear_surveys.php
+security_check.php
+
+# Frontend build files
+vite.config.js
+package.json
