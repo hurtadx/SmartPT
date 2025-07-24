@@ -6,8 +6,11 @@ Sistema de gestión de encuestas desarrollado con Laravel y React.
 
 **Instala solo esto antes de comenzar:**
 
-1. **Docker Desktop** - Descarga desde: https://www.docker.com/products/docker-desktop/
-2. **Git** - Descarga desde: https://git-scm.com/downloads
+**Docker Desktop**  
+Descarga desde: https://www.docker.com/products/docker-desktop/
+
+**Git**  
+Descarga desde: https://git-scm.com/downloads
 
 **Eso es todo.** No necesitas instalar PHP, Node.js, PostgreSQL ni configurar variables de entorno. Docker se encarga de todo automáticamente.
 
@@ -21,17 +24,19 @@ cd SmartPT
 docker-compose up -d --build
 ```
 
-Luego ejecuta las migraciones y genera la clave de Laravel (esto prepara la base de datos y activa la seguridad):
-
-```bash
-docker-compose exec backend php artisan migrate
-docker-compose exec backend php artisan key:generate
-```
-
 ### Acceso
-- **Aplicación**: http://localhost:5173
 
----
+**Aplicación:** http://localhost:5173
+
+### Usuarios de Prueba
+
+Se crean automáticamente estos usuarios de prueba:
+
+| Email | Contraseña |
+|-------|------------|
+| admin@smartpt.com | password123 |
+| user@smartpt.com | password123 |
+| evaluador@smartpt.com | password123 |
 
 ## Descripción
 
@@ -47,9 +52,9 @@ SmartPT/
 
 ## Tecnologías
 
-**Backend**: Laravel 10, PHP 8.2, PostgreSQL 15  
-**Frontend**: React 19, Vite 7  
-**Deployment**: Docker
+**Backend:** Laravel 10, PHP 8.2, PostgreSQL 15  
+**Frontend:** React 19, Vite 7  
+**Deployment:** Docker
 
 ## Funcionalidades
 
@@ -61,15 +66,15 @@ SmartPT/
 
 ## Si Docker no funciona
 
-**Opción simple**: Instalación local
+**Opción simple:** Instalación local
 
 1. Instalar: PHP 8.2, Composer, Node.js, PostgreSQL
 2. Backend: `cd SmartBackend && composer install && php artisan serve`
 3. Frontend: `cd SmartFrontend && npm install && npm run dev`
 
-## Tecnologías
+## Instalación Local Detallada
 
-#### Backend (Laravel)
+### Backend (Laravel)
 
 1. Navegar al directorio del backend:
 ```bash
@@ -111,7 +116,7 @@ php artisan migrate
 php artisan serve
 ```
 
-#### Frontend (React)
+### Frontend (React)
 
 1. Navegar al directorio del frontend:
 ```bash
@@ -142,4 +147,4 @@ npm run dev
 
 ---
 
-**Desarrollado por**: Andrés Hurtado Molina
+**Desarrollado por:** Andrés Hurtado Molina
