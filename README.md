@@ -1,4 +1,36 @@
 
+# SmartPT
+
+Sistema de gestión de encuestas desarrollado con Laravel y React.
+
+## Requisitos Previos
+
+**Instala solo esto antes de comenzar:**
+
+**Docker Desktop**  
+Descarga desde: https://www.docker.com/products/docker-desktop/
+
+**Git**  
+Descarga desde: https://git-scm.com/downloads
+
+**Eso es todo.** No necesitas instalar PHP, Node.js, PostgreSQL ni configurar variables de entorno. Docker se encarga de todo automáticamente.
+
+## Instalación Rápida
+
+```bash
+git clone https://github.com/hurtadx/SmartPT.git
+
+cd SmartPT
+
+docker-compose up -d --build
+```
+
+### Acceso
+
+**Aplicación:** http://localhost:5173
+
+
+
 ## Inicialización automática del backend (Docker)
 
 Al iniciar el contenedor del backend con Docker Compose:
@@ -29,35 +61,6 @@ docker compose exec backend php artisan test
 
 Esto ejecuta todos los tests unitarios y de integración de Laravel. No necesitas pasos previos, ya que la base de datos y el entorno se preparan automáticamente.
 
-# SmartPT
-
-Sistema de gestión de encuestas desarrollado con Laravel y React.
-
-## Requisitos Previos
-
-**Instala solo esto antes de comenzar:**
-
-**Docker Desktop**  
-Descarga desde: https://www.docker.com/products/docker-desktop/
-
-**Git**  
-Descarga desde: https://git-scm.com/downloads
-
-**Eso es todo.** No necesitas instalar PHP, Node.js, PostgreSQL ni configurar variables de entorno. Docker se encarga de todo automáticamente.
-
-## Instalación Rápida
-
-```bash
-git clone https://github.com/hurtadx/SmartPT.git
-
-cd SmartPT
-
-docker-compose up -d --build
-```
-
-### Acceso
-
-**Aplicación:** http://localhost:5173
 
 ### Usuarios de Prueba
 
